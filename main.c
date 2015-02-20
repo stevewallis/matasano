@@ -10,9 +10,8 @@ int s1e1() {
 	size_t size_bytes;
 	uint8_t* bytes = hexToBytes(hex, &size_bytes);
 
-	char* new_hex = bytesToHex(bytes, size_bytes);
-	printf("%s\n", new_hex);
-	free(new_hex);
+	//TODO base64 implementation
+	
 	free(bytes);
 	return 0;
 }
@@ -34,7 +33,7 @@ int s1e2() {
 	}
 
 	uint8_t* output = malloc(size_bytes_1);
-	fixedXOR(output, size_bytes_1, bytes_1, bytes_2);
+	XOR_fixedBlock(output, size_bytes_1, bytes_1, bytes_2);
 
 	char* result_hex = bytesToHex(output, size_bytes_1);
 	printf("%s\n", result_hex);
@@ -48,7 +47,22 @@ int s1e2() {
 	return 0;
 }
 
+int s1e3() {
+	char* input = "1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736";
+
+	size_t size_bytes;
+	uint8_t* bytes = hexToBytes(input, &size_bytes);
+
+	uint8_t results[0xff][size_bytes];
+
+	for (int i = 0; i < 0xff; i++){
+		XOR_singleCharKey(results[i], size_bytes, bytes, i);
+	}
+
+	return 0;
+}
+
 int main(int argc, char** argv) {
-	s1e2();
+	s1e3();
 	return 0;
 }

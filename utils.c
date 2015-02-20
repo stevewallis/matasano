@@ -2,14 +2,14 @@
 #include <stdlib.h>
 #include <string.h>
 
-uint8_t nibbleFromHexChar(char hex) {
+static uint8_t nibbleFromHexChar(char hex) {
 	if (hex >= '0' && hex <= '9') { return hex - '0'; }
 	if (hex >= 'A' && hex <= 'F') { return hex - 'A' + 10; }
 	if (hex >= 'a' && hex <= 'f') { return hex - 'a' + 10; }
 	return 0;
 }
 
-char nibbleToHexChar(uint8_t nibble) {
+static char nibbleToHexChar(uint8_t nibble) {
 	return nibble+((nibble<0xa)?'0':('a'-0xa));
 }
 
@@ -49,9 +49,17 @@ char* bytesToHex(uint8_t* bytes, size_t size) {
 }
 
 
-int fixedXOR(uint8_t* output, size_t size, uint8_t* input1, uint8_t* input2) {
+int XOR_fixedBlock(uint8_t* output, size_t size, uint8_t* input1, uint8_t* input2) {
 	for (int i = 0; i < size; i++) {
 		output[i] = input1[i]^input2[i];
 	}
 	return 0;
 }
+
+int XOR_singleCharKey(uint8_t* output, size_t size, uint8_t* input, char key) {
+	for (int i = 0; i < size; i++) {
+		output[i] = input[i]^key;
+	}
+	return 0;
+}
+
