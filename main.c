@@ -1,5 +1,6 @@
 #include <stdint.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include "utils.h"
 
 
@@ -9,11 +10,45 @@ int s1e1() {
 	size_t size_bytes;
 	uint8_t* bytes = hexToBytes(hex, &size_bytes);
 
+	char* new_hex = bytesToHex(bytes, size_bytes);
+	printf("%s\n", new_hex);
+	free(new_hex);
 	free(bytes);
 	return 0;
 }
 
+int s1e2() {
+	char* hex_input_1 = "1c0111001f010100061a024b53535009181c";
+	char* hex_input_2 = "686974207468652062756c6c277320657965";
+
+	size_t size_bytes_1;
+	uint8_t* bytes_1 = hexToBytes(hex_input_1, &size_bytes_1);
+
+	size_t size_bytes_2;
+	uint8_t* bytes_2 = hexToBytes(hex_input_2, &size_bytes_2);
+
+	if (size_bytes_1 != size_bytes_2) {
+		free(bytes_2);
+		free(bytes_1);
+		return 1;
+	}
+
+	uint8_t* output = malloc(size_bytes_1);
+	fixedXOR(output, size_bytes_1, bytes_1, bytes_2);
+
+	char* result_hex = bytesToHex(output, size_bytes_1);
+	printf("%s\n", result_hex);
+
+	printf("746865206b696420646f6e277420706c6179 <-- EXPECTED RESULT\n");
+
+	free(result_hex);
+	free(output);
+	free(bytes_2);
+	free(bytes_1);
+	return 0;
+}
+
 int main(int argc, char** argv) {
-	s1e1();
+	s1e2();
 	return 0;
 }

@@ -9,6 +9,10 @@ uint8_t nibbleFromHexChar(char hex) {
 	return 0;
 }
 
+char nibbleToHexChar(uint8_t nibble) {
+	return nibble+((nibble<0xa)?'0':('a'-0xa));
+}
+
 uint8_t* hexToBytes(char* hex, size_t *new_size) {
 	char* p;
 	uint8_t* bytes;
@@ -23,4 +27,31 @@ uint8_t* hexToBytes(char* hex, size_t *new_size) {
 	bytes[*new_size] = 0;
 
 	return bytes;
+}
+
+char* bytesToHex(uint8_t* bytes, size_t size) {
+	uint8_t* p;
+	char* hex;
+	size_t new_size;
+
+	new_size = size*2;
+	hex = malloc(new_size+1);
+
+	p = bytes;
+	for (int i = 0; i < new_size; i+=2) {
+		hex[i] = nibbleToHexChar(*p>>4);
+		hex[i+1] = nibbleToHexChar(*p&0x0f);
+		p++;
+	}
+	hex[new_size] = 0;
+
+	return hex;
+}
+
+
+int fixedXOR(uint8_t* output, size_t size, uint8_t* input1, uint8_t* input2) {
+	for (int i = 0; i < size; i++) {
+		output[i] = input1[i]^input2[i];
+	}
+	return 0;
 }
