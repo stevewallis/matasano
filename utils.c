@@ -67,7 +67,6 @@ int XOR_singleCharKey(uint8_t* output, size_t size, uint8_t* input, char key) {
 static char* ENGLISH_CHAR_FREQUENCY = "ETAOINSHRDLUCMWFGYPBVKJXQZ";
 int frequencyAnalysisScore(unsigned char* bytes, size_t size) {
 
-	int invalids = 0;
 	int letter_freqs[26] = {0};
 	for (int i = 0; i < size; i++) {
 		if (bytes[i] < 32 || bytes[i] > 127) {
@@ -84,11 +83,7 @@ int frequencyAnalysisScore(unsigned char* bytes, size_t size) {
 			letter_freqs[bytes[i]-'A']++;
 			continue;	
 		}
-		invalids++;
-		//printf()
 	}
-
-	if (invalids > size>>1) { return 0; } //if more than half the string is invalid ascii, then 0...
 
 	char rankedAlphabet[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
