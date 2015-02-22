@@ -51,16 +51,24 @@ char* bytesToHex(uint8_t* bytes, size_t size) {
 
 
 int XOR_fixedBlock(uint8_t* output, size_t size, uint8_t* input1, uint8_t* input2) {
-	for (int i = 0; i < size; i++) {
+	for (int i = 0; i < size; ++i) {
 		output[i] = input1[i]^input2[i];
 	}
 	return 0;
 }
 
 int XOR_singleCharKey(uint8_t* output, size_t size, uint8_t* input, char key) {
-	for (int i = 0; i < size; i++) {
+	for (int i = 0; i < size; ++i) {
 		output[i] = input[i]^key;
 	}
+	return 0;
+}
+
+int XOR_repeatingKey(uint8_t* output, size_t size, uint8_t* input, uint8_t* key, size_t key_size) {
+	for (int i = 0; i < size; ++i) {
+		output[i] = input[i]^key[i%key_size];
+	}
+
 	return 0;
 }
 

@@ -13,3 +13,4 @@ int frequencyAnalysisScore(unsigned char* bytes, size_t size);
 
 int XOR_fixedBlock(uint8_t* output, size_t size, uint8_t* input1, uint8_t* input2);
 int XOR_singleCharKey(uint8_t* output, size_t size, uint8_t* input, char key);
+int XOR_repeatingKey(uint8_t* output, size_t size, uint8_t* input, uint8_t* key, size_t key_size);
