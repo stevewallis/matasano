@@ -1,6 +1,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "utils.h"
 
 
@@ -74,7 +75,81 @@ int s1e3() {
 	return 0;
 }
 
+
+int s1e4() {
+	int lines_alloc = 128;
+	int line_length = 65;
+	size_t line_bytes_length;
+
+	uint8_t** lines = malloc(sizeof(uint8_t*)*lines_alloc);
+
+	FILE *fp = fopen("data/s1e4.txt", "r");
+	if (fp == NULL) {
+		printf("no file...");
+		return 1;
+	}
+	int total_lines = 0;
+	while(1) {
+		if (total_lines >= lines_alloc) {
+			lines_alloc*=1.5;
+			lines = realloc(lines, sizeof(uint8_t*)*lines_alloc);
+			if (lines == NULL) {
+				return 2;
+			}
+		}
+
+		char line[line_length];
+		if (fgets(line, line_length, fp) == NULL) {
+			break; //no more lines
+		}
+
+		for (int i = strlen(line)-1; i >= 0; --i) {
+			if (line[i] != '\n' && line[i] != '\r') {
+				line[i+1] = '\0';
+				break;
+			}
+		}
+
+		lines[total_lines] = hexToBytes(line, &line_bytes_length);
+
+		total_lines++;
+	}
+
+	uint8_t results[total_lines][0xff][line_bytes_length+1];
+	for (int i = 0; i < total_lines; ++i) {
+		for (int j = 0; j < 0xff; j++){
+			XOR_singleCharKey(results[i][j], line_bytes_length, lines[i], j);
+			results[i][j][line_bytes_length] = '\0';
+		}
+	}
+
+	int bestScore = 1;
+	int bestLine, bestKey;
+	for (int i = 0; i < total_lines; ++i) {
+		for (int j = 0; j < 0xff; j++){
+			int score = frequencyAnalysisScore(results[i][j], line_bytes_length);
+			if (score >= bestScore) {
+				bestScore = score;
+				bestLine = i;
+				bestKey = j;
+
+				printf("-> candidate is now line %d, key %c, score %d\n and is: %s\n", bestLine, bestKey, bestScore, results[bestLine][bestKey]);
+			}
+		}
+	}
+
+	printf("******\nTHE MOST LIKELY is line %d, with key %c, which has score %d and is: %s\n", bestLine, bestKey, bestScore, results[bestLine][bestKey]);
+
+	for (int i = total_lines-1; i >= 0; --i) {
+		free(lines[i]);
+	}
+	free(lines);
+
+	return 0;
+}
+
+
 int main(int argc, char** argv) {
-	s1e3();
+	s1e4();
 	return 0;
 }

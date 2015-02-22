@@ -65,11 +65,16 @@ int XOR_singleCharKey(uint8_t* output, size_t size, uint8_t* input, char key) {
 }
 
 static char* ENGLISH_CHAR_FREQUENCY = "ETAOINSHRDLUCMWFGYPBVKJXQZ";
-int frequencyAnalysisScore(char* bytes, size_t size) {
+int frequencyAnalysisScore(unsigned char* bytes, size_t size) {
 
 	int invalids = 0;
 	int letter_freqs[26] = {0};
 	for (int i = 0; i < size; i++) {
+		if (bytes[i] < 32 || bytes[i] > 127) {
+			if (bytes[i] != '\r' && bytes[i] != '\n' && bytes[i] != '\t')
+			return 0; 	
+		} 
+
 		if (bytes[i] >= 'a' && bytes[i] <= 'z') {
 			letter_freqs[bytes[i]-'a']++;
 			continue;
