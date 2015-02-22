@@ -114,6 +114,8 @@ int s1e4() {
 
 		total_lines++;
 	}
+	fclose(fp);
+	printf("READ %d LINES. Searching for secrets...\n", total_lines);
 
 	uint8_t results[total_lines][0xff][line_bytes_length+1];
 	for (int i = 0; i < total_lines; ++i) {
