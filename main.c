@@ -53,11 +53,23 @@ int s1e3() {
 	size_t size_bytes;
 	uint8_t* bytes = hexToBytes(input, &size_bytes);
 
-	uint8_t results[0xff][size_bytes];
-
+	uint8_t results[0xff][size_bytes+1];
 	for (int i = 0; i < 0xff; i++){
 		XOR_singleCharKey(results[i], size_bytes, bytes, i);
+		results[i][size_bytes] = '\0';
 	}
+
+	int bestScore = 0;
+	int bestIdx;
+	for (int i = 0; i < 0xff; i++) {
+		int score = frequencyAnalysisScore(results[i], size_bytes);
+		if (score > bestScore) {
+			bestScore = score;
+			bestIdx = i;
+		}
+	}
+
+	printf("most likely has score %d and is: %s\n", bestScore, results[bestIdx]);
 
 	return 0;
 }
