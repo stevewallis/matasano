@@ -1,22 +1,21 @@
-#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
 
-static uint8_t nibbleFromHexChar(char hex) {
+static char nibbleFromHexChar(char hex) {
 	if (hex >= '0' && hex <= '9') { return hex - '0'; }
 	if (hex >= 'A' && hex <= 'F') { return hex - 'A' + 10; }
 	if (hex >= 'a' && hex <= 'f') { return hex - 'a' + 10; }
 	return 0;
 }
 
-static char nibbleToHexChar(uint8_t nibble) {
+static char nibbleToHexChar(char nibble) {
 	return nibble+((nibble<0xa)?'0':('a'-0xa));
 }
 
-uint8_t* hexToBytes(char* hex, size_t *new_size) {
+char* hexToBytes(char* hex, size_t *new_size) {
 	char* p;
-	uint8_t* bytes;
+	char* bytes;
 	*new_size = strlen(hex)/2;
 	bytes = malloc(*new_size+1);
 
@@ -30,8 +29,8 @@ uint8_t* hexToBytes(char* hex, size_t *new_size) {
 	return bytes;
 }
 
-char* bytesToHex(uint8_t* bytes, size_t size) {
-	uint8_t* p;
+char* bytesToHex(char* bytes, size_t size) {
+	char* p;
 	char* hex;
 	size_t new_size;
 
@@ -50,21 +49,21 @@ char* bytesToHex(uint8_t* bytes, size_t size) {
 }
 
 
-int XOR_fixedBlock(uint8_t* output, size_t size, uint8_t* input1, uint8_t* input2) {
+int XOR_fixedBlock(char* output, size_t size, char* input1, char* input2) {
 	for (int i = 0; i < size; ++i) {
 		output[i] = input1[i]^input2[i];
 	}
 	return 0;
 }
 
-int XOR_singleCharKey(uint8_t* output, size_t size, uint8_t* input, char key) {
+int XOR_singleCharKey(char* output, size_t size, char* input, char key) {
 	for (int i = 0; i < size; ++i) {
 		output[i] = input[i]^key;
 	}
 	return 0;
 }
 
-int XOR_repeatingKey(uint8_t* output, size_t size, uint8_t* input, uint8_t* key, size_t key_size) {
+int XOR_repeatingKey(char* output, size_t size, char* input, char* key, size_t key_size) {
 	for (int i = 0; i < size; ++i) {
 		output[i] = input[i]^key[i%key_size];
 	}
@@ -73,7 +72,7 @@ int XOR_repeatingKey(uint8_t* output, size_t size, uint8_t* input, uint8_t* key,
 }
 
 static char* ENGLISH_CHAR_FREQUENCY = "ETAOINSHRDLUCMWFGYPBVKJXQZ";
-int frequencyAnalysisScore(unsigned char* bytes, size_t size) {
+int frequencyAnalysisScore(char* bytes, size_t size) {
 
 	int letter_freqs[26] = {0};
 	for (int i = 0; i < size; i++) {

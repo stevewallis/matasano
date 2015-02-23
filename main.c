@@ -1,4 +1,3 @@
-#include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -10,7 +9,7 @@
 int s1e1() {
 	char* hex = "49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d";
 	size_t size_bytes;
-	uint8_t* bytes = hexToBytes(hex, &size_bytes);
+	char* bytes = hexToBytes(hex, &size_bytes);
 
 	char* output = malloc(Base64encode_len(size_bytes));
 	Base64encode(output, bytes,size_bytes);
@@ -27,10 +26,10 @@ int s1e2() {
 	char* hex_input_2 = "686974207468652062756c6c277320657965";
 
 	size_t size_bytes_1;
-	uint8_t* bytes_1 = hexToBytes(hex_input_1, &size_bytes_1);
+	char* bytes_1 = hexToBytes(hex_input_1, &size_bytes_1);
 
 	size_t size_bytes_2;
-	uint8_t* bytes_2 = hexToBytes(hex_input_2, &size_bytes_2);
+	char* bytes_2 = hexToBytes(hex_input_2, &size_bytes_2);
 
 	if (size_bytes_1 != size_bytes_2) {
 		free(bytes_2);
@@ -38,7 +37,7 @@ int s1e2() {
 		return 1;
 	}
 
-	uint8_t* output = malloc(size_bytes_1);
+	char* output = malloc(size_bytes_1);
 	XOR_fixedBlock(output, size_bytes_1, bytes_1, bytes_2);
 
 	char* result_hex = bytesToHex(output, size_bytes_1);
@@ -57,9 +56,9 @@ int s1e3() {
 	char* input = "1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736";
 
 	size_t size_bytes;
-	uint8_t* bytes = hexToBytes(input, &size_bytes);
+	char* bytes = hexToBytes(input, &size_bytes);
 
-	uint8_t results[0xff][size_bytes+1];
+	char results[0xff][size_bytes+1];
 	for (int i = 0; i < 0xff; i++){
 		XOR_singleCharKey(results[i], size_bytes, bytes, i);
 		results[i][size_bytes] = '\0';
@@ -86,7 +85,7 @@ int s1e4() {
 	int line_length = 65;
 	size_t line_bytes_length;
 
-	uint8_t** lines = malloc(sizeof(uint8_t*)*lines_alloc);
+	char** lines = malloc(sizeof(char*)*lines_alloc);
 
 	FILE *fp = fopen("data/s1e4.txt", "r");
 	if (fp == NULL) {
@@ -97,7 +96,7 @@ int s1e4() {
 	while(1) {
 		if (total_lines >= lines_alloc) {
 			lines_alloc*=1.5;
-			lines = realloc(lines, sizeof(uint8_t*)*lines_alloc);
+			lines = realloc(lines, sizeof(char*)*lines_alloc);
 			if (lines == NULL) {
 				return 2;
 			}
@@ -122,7 +121,7 @@ int s1e4() {
 	fclose(fp);
 	printf("READ %d LINES. Searching for secrets...\n", total_lines);
 
-	uint8_t results[total_lines][0xff][line_bytes_length+1];
+	char results[total_lines][0xff][line_bytes_length+1];
 	for (int i = 0; i < total_lines; ++i) {
 		for (int j = 0; j < 0xff; j++){
 			XOR_singleCharKey(results[i][j], line_bytes_length, lines[i], j);
@@ -159,7 +158,7 @@ int s1e5() {
 	char* input = "Burning 'em, if you ain't quick and nimble\nI go crazy when I hear a cymbal";
 	
 	int size = strlen(input);
-	uint8_t* output = malloc(size);
+	char* output = malloc(size);
 	XOR_repeatingKey(output, size, input, "ICE", 3);
 
 	char* result_hex = bytesToHex(output, size);
@@ -172,5 +171,14 @@ int s1e5() {
 
 int main(int argc, char** argv) {
 	s1e1();
+	printf("******************\n");
+	s1e2();
+	printf("******************\n");	
+	s1e3();
+	printf("******************\n");	
+	s1e4();
+	printf("******************\n");	
+	s1e5();
+	printf("******************\n");	
 	return 0;
 }
