@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "utils.h"
+#include "base64.h"
 
 
 
@@ -11,8 +12,12 @@ int s1e1() {
 	size_t size_bytes;
 	uint8_t* bytes = hexToBytes(hex, &size_bytes);
 
-	//TODO base64 implementation
-	
+	char* output = malloc(Base64encode_len(size_bytes));
+	Base64encode(output, bytes,size_bytes);
+
+	printf("%s\n", output);
+	printf("SSdtIGtpbGxpbmcgeW91ciBicmFpbiBsaWtlIGEgcG9pc29ub3VzIG11c2hyb29t <-- EXPECTED RESULT\n");
+	free(output);
 	free(bytes);
 	return 0;
 }
@@ -166,6 +171,6 @@ int s1e5() {
 
 
 int main(int argc, char** argv) {
-	s1e5();
+	s1e1();
 	return 0;
 }

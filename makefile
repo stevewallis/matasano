@@ -1,7 +1,7 @@
 CC=gcc
 CFLAGS=-c -ggdb -Wall
 LDFLAGS= 
-SOURCES=main.c utils.c
+SOURCES=main.c utils.c base64.c
 OBJECTS=$(SOURCES:.c=.o)
 EXECUTABLE=bin/main
 
@@ -15,5 +15,5 @@ $(EXECUTABLE): $(OBJECTS)
 
 clean:
 	rm bin/main
-	rm main.o utils.o
+	rm *.o
 	
