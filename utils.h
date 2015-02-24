@@ -6,6 +6,10 @@ char* hexToBytes(char* hex, size_t *new_size);
 // result must be free()'d
 char* bytesToHex(char* bytes, size_t size);
 
+// will read a file into a continuous buffer
+// result must be free()'d
+char* readFileToBuffer(char** ptr, char* filename, int ignoreWhitespace);
+
 
 int frequencyAnalysisScore(char* bytes, size_t size);
 

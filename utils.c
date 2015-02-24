@@ -48,6 +48,39 @@ char* bytesToHex(char* bytes, size_t size) {
 	return hex;
 }
 
+int readFileToBuffer(char** ptr, char* filename, int ignoreWhitespace) {
+	FILE* fp = fopen(filename, "rb");
+	if (fp == NULL) {
+		return 1;
+	}
+	fseek(fp, 0L, SEEK_END);
+	long size = ftell(fp);
+	rewind(fp);
+
+	*ptr = malloc(size);
+	if (*ptr == NULL) {
+		fclose(fp);
+		return 2;
+	}
+
+	long truesize = 0;
+	int c;
+	for (int i = 0; i < size; ++i) {
+		c = fgetc(fp);
+		if (c != EOF) {
+			if (ignoreWhitespace && (c < 0x21 || c > 0x7e)) {
+				continue;
+			}
+			(*ptr)[truesize] = c;
+			truesize++;
+		} else { break; }
+	}
+
+	fclose(fp);
+
+	return 0;
+}
+
 
 int XOR_fixedBlock(char* output, size_t size, char* input1, char* input2) {
 	for (int i = 0; i < size; ++i) {

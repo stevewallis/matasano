@@ -169,8 +169,18 @@ int s1e5() {
 }
 
 
+int s1e6() {
+	char* filename = "data/s1e6.txt";
+	char* buffer;
+	readFileToBuffer(&buffer, filename, 1);
+
+	free(buffer);
+
+	return 0;
+}
+
 int main(int argc, char** argv) {
-	s1e1();
+	/*s1e1();
 	printf("******************\n");
 	s1e2();
 	printf("******************\n");	
@@ -179,6 +189,7 @@ int main(int argc, char** argv) {
 	s1e4();
 	printf("******************\n");	
 	s1e5();
-	printf("******************\n");	
+	printf("******************\n");	*/
+	s1e6();
 	return 0;
 }
