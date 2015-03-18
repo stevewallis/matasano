@@ -3,6 +3,7 @@
 #include <string.h>
 #include "utils.h"
 #include "base64.h"
+#include "rdtsc.h"
 
 
 
@@ -171,10 +172,29 @@ int s1e5() {
 
 int s1e6() {
 	char* filename = "data/s1e6.txt";
-	char* buffer;
-	readFileToBuffer(&buffer, filename, 1);
+	char* file_buffer;
+	readFileToBuffer(&file_buffer, filename, 1);
 
-	free(buffer);
+	int b64size = Base64decode_len(file_buffer);
+	char* bytes = malloc(b64size);
+	Base64decode(bytes, file_buffer);
+	free(file_buffer);
+
+	//establish probable key length
+
+
+	/*unsigned long long a,b;
+  	a = rdtsc();
+  	b = rdtsc();
+  	printf("%llu\n", b-a);*/
+
+
+  	//int hd = hammingDistance(in1, in2, strlen(in1));
+
+
+	printf("%d\n",hd);
+
+	free(bytes);
 
 	return 0;
 }

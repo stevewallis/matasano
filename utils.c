@@ -164,6 +164,20 @@ int frequencyAnalysisScore(char* bytes, size_t size) {
 	return score;
 }
 
+int hammingDistance(char* input1, char* input2, size_t size) {
+	int hammingDistance = 0;
+	for (int i = 0; i < size; ++i) {
+		char xor = input1[i] ^ input2[i];
+		for (unsigned char j = 0x1; j < 0x80; j<<=1) {
+			if ((xor&j) > 0) {
+				hammingDistance++;
+			}
+		}
+	}
+	return hammingDistance;
+}
+
+
 
 
 
